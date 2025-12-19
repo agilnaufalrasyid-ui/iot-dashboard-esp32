@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard IoT ESP32</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f4f4;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<h2 align="center">📊 Dashboard IoT ESP32</h2>
+
+<div class="card">
+  <p>🌡 Suhu: <b><span id="suhu">-</span> °C</b></p>
+  <p>💧 Kelembaban: <b><span id="kelembaban">-</span> %</b></p>
+  <p>💡 Cahaya (LDR): <b><span id="cahaya">-</span></b></p>
+  <p>🚶 PIR: <b><span id="gerakan">-</span></b></p>
+</div>
+
+<script>
+const firebaseURL =
+  "https://p13-latian-default-rtdb.asia-southeast1.firebasedatabase.app/data.json";
+
+function loadData() {
+  fetch(firebaseURL)
+    .then(res => res.json())
+    .then(data => {
+      if (!data) return;
+
+      document.getElementById("suhu").innerText = data.suhu ?? "-";
+      document.getElementById("kelembaban").innerText = data.kelembaban ?? "-";
+      document.getElementById("cahaya").innerText = data.cahaya ?? "-";
+      document.getElementById("gerakan").innerText =
+        data.gerakan ? "Terdeteksi" : "Tidak";
+    })
+    .catch(err => console.error(err));
+}
+
+setInterval(loadData, 1000);
+</script>
+
+</body>
+</html>
